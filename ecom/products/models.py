@@ -43,8 +43,11 @@ class Product(BaseModel):
         self.slug=slugify(self.product_name)
         super(Product, self).save(*args, **kwargs)
         
+    # def __str__(self):
+    #     return self.product_name
     def __str__(self):
-        return self.product_name
+        return f"{self.product_name} ({', '.join([size.size_name for size in self.size_variant.all()])})"
+
     
     def get_product_price_by_size(self, size):
         return self.price+SizeVariant.objects.get(size_name=size).price
@@ -53,3 +56,13 @@ class Product(BaseModel):
 class ProductImage(BaseModel):
     product=models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product_images')
     image=models.ImageField(upload_to='product')
+    
+    
+class Coupon(BaseModel):
+    coupon_code=models.CharField(max_length=100)
+    is_expired=models.BooleanField(default=False)
+    discount_price=models.IntegerField(default=100)
+    minimum_amount=models.IntegerField(default=500)
+    
+    
+   

@@ -5,6 +5,7 @@ from .models import *
 
 
 admin.site.register(Category)
+admin.site.register(Coupon)
 
 
 
@@ -19,6 +20,7 @@ class ProductAdmin(admin.ModelAdmin):
 class ColorVariantAdmin(admin.ModelAdmin):
     list_display=['color_name', 'price']
     model=ColorVariant
+    
 @admin.register(SizeVariant)
 class SizeVariantAdmin(admin.ModelAdmin):
     list_display=['size_name', 'price']

@@ -57,7 +57,7 @@
             </div>
             <!-- price-detail-wrap .// -->
 
-            <p>{{product.product_desription}}</p>
+            <p>{{product.product_description}}</p>
 
             <dl class="row">
               <dt class="col-sm-3">Model#</dt>
@@ -97,7 +97,10 @@
                 </div>
               </div>
               <!-- col.// -->
-              {% if product.size_variant.count %}
+              <p>Size variants: {{ product.size_variant.count }}</p>
+
+              {% if product.size_variant.all %}
+
               <div class="form-group col-md">
                 <label>Select size</label>
                 <div class="mt-1">
@@ -106,25 +109,27 @@
                   <label
                     class="custom-control custom-radio custom-control-inline"
                   >
-                    <input type="radio" name="select_size" {%if
-                    select_size==size.size_name%} checked {%endif%}
+                    <input type="radio" onchange="get_correct_price('{{size.size_name}}')" name="select_size" value="{{ size.size_name }}" {% if selected_size == size.size_name %} checked {% endif %}
                     class="custom-control-input" />
                     <div class="custom-control-label">{{size.size_name}}</div>
                   </label>
 
-                  {% endfor %}
+                  {% endfor %} 
                 </div>
               </div>
+              {% else %}
+  <p>No size variants available.</p>
               {% endif %}
               <!-- col.// -->
             </div>
             <!-- row.// -->
 
             <a href="#" class="btn btn-primary"> Buy now </a>
-            <a href="#" class="btn btn-outline-primary">
+            <a href="{% url 'add_to_cart' product.uid %}?variant={{selected_size}}" class="btn btn-outline-primary">
               <span class="text">Add to cart</span>
               <i class="fas fa-shopping-cart"></i>
             </a>
+            
           </article>
           <!-- product-info-aside .// -->
         </main>
@@ -139,8 +144,11 @@
 
 <script>
   function get_correct_price(size) {
-    window.location.href = window.location.pathname + "?size=${size}";
+    window.location.href = window.location.pathname + `?size=${size}`;
   }
+  
+
+  
 </script>
 
 {% endblock %}
